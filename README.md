@@ -32,39 +32,3 @@ worker/    the Cloudflare Worker (keys, bio, chat + voice proxy)
 widget/    the floating chat widget, one self-contained file
 demo/      a standalone page to see it working
 ```
-
-## Run the demo locally
-
-```bash
-cd ai-portfolio-chatbot
-python -m http.server 3000
-# open http://localhost:3000/demo/
-```
-
-The demo points at my deployed Worker, which allows `localhost:3000`, so the chat works straight away.
-
-## Deploy your own Worker
-
-```bash
-cd worker
-npm install
-npx wrangler login
-npx wrangler secret put GROQ_API_KEY        # free key from console.groq.com
-npx wrangler secret put ELEVENLABS_API_KEY  # optional, only for cloned voice
-npm run deploy
-```
-
-Then point the widget at it:
-
-```html
-<script src="widget/chatbot.js"
-        data-endpoint="https://your-worker.workers.dev"
-        data-accent="#cc7b57"></script>
-```
-
-Edit the bio and the allowed origins near the top of `worker/worker.js`. Swap `MODEL` for any model Groq lists if you want it lighter or smarter.
-
-## Notes
-
-- The liquid-glass refraction is a port of [archisvaze/liquid-glass](https://github.com/archisvaze/liquid-glass). The SVG displacement filter is Chromium-only, so other browsers fall back to a plain frosted blur.
-- Keys live only as Worker secrets, never in the repo or the browser.
