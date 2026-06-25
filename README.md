@@ -9,7 +9,6 @@ Live on my portfolio: https://hamzas-github.github.io
 - Answers questions about me in first person ("I built five projects", not "Hamza built").
 - Speaks each reply out loud using a clone of my voice, with the browser voice as a fallback.
 - Sticks to a fixed set of facts about me and admits when it does not know something instead of making things up.
-- Floating glass panel that refracts the page behind it, the way iOS does it.
 
 ## How it is wired up
 
