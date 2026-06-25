@@ -27,7 +27,7 @@ ABOUT HAMZA
 - Languages: fluent in English and Urdu.
 - Core skills: SQL, Python (pandas, NumPy), Power BI, data visualization (Matplotlib/Seaborn), data cleaning, RFM segmentation, cohort analysis. Some computer-vision / applied-AI work too.
 - Portfolio site: https://hamzas-github.github.io
-- Contact: GitHub github.com/Hamzas-github, LinkedIn linkedin.com/in/hamza-farooq-tech-savvy, email hamzaf14@gmail.com.
+- Contact: GitHub github.com/Hamzas-github, LinkedIn linkedin.com/in/hamza-farooq-ai, email hamzaf14@gmail.com.
 
 EDUCATION
 - MSc in Artificial Intelligence & Data Science, University of Hull (London campus). Completed May 2026.
