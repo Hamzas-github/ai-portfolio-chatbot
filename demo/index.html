@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Portfolio chatbot demo</title>
+  <style>
+    :root { --accent: #cc7b57; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; color: #f2efec;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background:
+        radial-gradient(60% 50% at 20% 15%, rgba(204,123,87,.45), transparent 60%),
+        radial-gradient(50% 60% at 85% 80%, rgba(120,160,200,.35), transparent 60%),
+        #14110f;
+    }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 4rem 1.5rem 8rem; }
+    h1 { font-size: 2.4rem; margin: 0 0 .3rem; }
+    .sub { color: rgba(242,239,236,.7); margin: 0 0 2.5rem; }
+    .card {
+      background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1);
+      border-radius: 16px; padding: 1.25rem 1.4rem; margin-bottom: 1.1rem;
+    }
+    .card h2 { margin: 0 0 .4rem; font-size: 1.15rem; }
+    .card p { margin: 0; color: rgba(242,239,236,.75); line-height: 1.6; }
+    .tags { margin-top: .8rem; display: flex; flex-wrap: wrap; gap: .4rem; }
+    .tag {
+      font-family: ui-monospace, monospace; font-size: .72rem; padding: .2rem .55rem;
+      border: 1px solid rgba(255,255,255,.18); border-radius: 6px; color: rgba(242,239,236,.8);
+    }
+    .hint { margin-top: 2rem; color: var(--accent); font-size: .9rem; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Ask my portfolio anything</h1>
+    <p class="sub">A floating chat that answers questions about my work in my own voice. Open it bottom-right. Move the panel over this text to see it refract.</p>
+
+    <div class="card">
+      <h2>E-commerce Sales &amp; Customer Analytics</h2>
+      <p>About a million real online-retail transactions cleaned with pandas, analysed in SQL, with RFM segmentation and cohort retention. Roughly 35% of customers drive about 67% of revenue.</p>
+      <div class="tags"><span class="tag">Python</span><span class="tag">pandas</span><span class="tag">SQL</span><span class="tag">Power BI</span><span class="tag">RFM</span></div>
+    </div>
+
+    <div class="card">
+      <h2>London Rental Market Analysis</h2>
+      <p>An end-to-end study of 2,838 London rental listings: data cleaning, a SQLite database, eight documented SQL queries, charts, and a Power BI dashboard.</p>
+      <div class="tags"><span class="tag">SQLite</span><span class="tag">SQL</span><span class="tag">Data viz</span></div>
+    </div>
+
+    <div class="card">
+      <h2>EyeSpeak</h2>
+      <p>A webcam eye-tracking communication board that lets someone talk by looking at a card and blinking. Real-time computer vision with WebGazer and MediaPipe, running on-device in the browser.</p>
+      <div class="tags"><span class="tag">WebGazer</span><span class="tag">MediaPipe</span><span class="tag">Computer vision</span></div>
+    </div>
+
+    <p class="hint">The chat bubble is in the bottom-right corner. Click it to start.</p>
+  </div>
+
+  <!-- Point data-endpoint at your deployed worker. -->
+  <script src="../widget/chatbot.js" data-endpoint="https://hamza-chat-worker.hamzas-dev.workers.dev"></script>
+</body>
+</html>
