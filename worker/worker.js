@@ -73,6 +73,18 @@ PROJECTS (six total; figures are exact, don't round them away)
 
 If asked how to get in touch, hire me, or see code, point them to my contact links and GitHub above.`;
 
+// Make links speakable: say what a link IS, not its raw characters.
+// On-screen text keeps the real URL; only the spoken text is simplified.
+function speakable(text) {
+  return text
+    .replace(/\S+@\S+\.\S+/g, 'my email')
+    .replace(/(https?:\/\/)?(www\.)?linkedin\.com\/\S*/gi, 'my LinkedIn')
+    .replace(/(https?:\/\/)?(www\.)?github\.com\/\S*/gi, 'my GitHub')
+    .replace(/(https?:\/\/)?hamzas-github\.github\.io\/eyespeak\S*/gi, 'the EyeSpeak demo')
+    .replace(/(https?:\/\/)?hamzas-github\.github\.io\S*/gi, 'my website')
+    .replace(/https?:\/\/\S+/gi, 'the link');
+}
+
 function corsHeaders(origin) {
   const allow = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
   return {
@@ -110,7 +122,7 @@ export default {
           'content-type': 'application/json',
           accept: 'audio/mpeg',
         },
-        body: JSON.stringify({text: text.slice(0, 1200), model_id: 'eleven_multilingual_v2'}),
+        body: JSON.stringify({text: speakable(text).slice(0, 1200), model_id: 'eleven_multilingual_v2'}),
       });
       if (!tts.ok) return json({error: 'tts', detail: await tts.text()}, 502, headers);
       return new Response(tts.body, {headers: {...headers, 'content-type': 'audio/mpeg'}});
