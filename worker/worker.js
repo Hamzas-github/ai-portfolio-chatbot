@@ -1,16 +1,13 @@
-// Cloudflare Worker that backs the portfolio chatbot.
-// It keeps the API keys server-side, injects the bio as the system prompt, proxies
-// chat to Groq (free, OpenAI-compatible) and text-to-speech to ElevenLabs.
-
-// Chat model. Swap for any model Groq lists (e.g. 'llama-3.1-8b-instant' for lighter load).
+// Groq: free, fast, OpenAI-compatible. Get a key at https://console.groq.com.
+// Swap MODEL for any model Groq lists (e.g. 'llama-3.1-8b-instant' for lighter load).
 const MODEL = 'llama-3.3-70b-versatile';
 const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
-// ElevenLabs voice for the spoken replies.
+// ElevenLabs voice clone for the "Read aloud" button.
 const VOICE_ID = 'TOrpR7xV0OQKJ6vL4TfO';
 const TTS_URL = `https://api.elevenlabs.io/v1/text-to-speech/${VOICE_ID}`;
 
-// Only these origins may use this worker, so nobody else can spend the API keys.
+// Only these origins may use this worker (so nobody else can spend your API key).
 const ALLOWED_ORIGINS = [
   'https://hamzas-github.github.io',
   'http://localhost:3000',
@@ -110,7 +107,7 @@ export default {
     if (req.method !== 'POST') return json({error: 'POST only'}, 405, headers);
     if (!ALLOWED_ORIGINS.includes(origin)) return json({error: 'forbidden'}, 403, headers);
 
-    // Text-to-speech with the cloned voice.
+    // Text-to-speech with Hamza's cloned voice.
     if (new URL(req.url).pathname === '/speak') {
       let text;
       try { text = (await req.json()).text; } catch { return json({error: 'bad json'}, 400, headers); }

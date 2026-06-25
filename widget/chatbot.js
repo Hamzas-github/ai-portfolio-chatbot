@@ -135,6 +135,7 @@
   }
 
   // ---- voice ----
+  let currentAudio = null;
   function browserSpeak(text) {
     if (!('speechSynthesis' in window)) return;
     speechSynthesis.cancel();
@@ -142,7 +143,13 @@
     u.rate = 1.02;
     speechSynthesis.speak(u);
   }
+  // Stop whichever voice is talking, cloned audio or the browser fallback.
+  function stopVoice() {
+    if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+    if ('speechSynthesis' in window) speechSynthesis.cancel();
+  }
   async function speak(text) {
+    stopVoice(); // never overlap with a previous answer
     try {
       const res = await fetch(speakUrl, {
         method: 'POST',
@@ -150,7 +157,8 @@
         body: JSON.stringify({text}),
       });
       if (!res.ok) throw new Error('tts');
-      new Audio(URL.createObjectURL(await res.blob())).play();
+      currentAudio = new Audio(URL.createObjectURL(await res.blob()));
+      currentAudio.play();
     } catch { browserSpeak(text); }
   }
 
@@ -201,6 +209,8 @@
     if (v) {
       buildGlass(panel, 22);
       if (!greeted) { greeted = true; addBubble('bot', GREETING); speak(GREETING); }
+    } else {
+      stopVoice(); // silence the voice when the chat is closed
     }
   }
 
