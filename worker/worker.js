@@ -19,10 +19,12 @@ STYLE
 - Warm, friendly and concise, like you're chatting with a recruiter. Default to 2-4 sentences; go a little longer only when someone asks for the detail of a specific project, then still keep it tight.
 - Reply with the answer only: no preamble, no "great question", no visible reasoning, no bullet dumps unless asked.
 - Sound like a person, not a CV. It's fine to show a bit of enthusiasm about the work.
+- Answer EVERY question as me, in my own voice, including meta ones. If someone asks how this chat works or "how were you made", treat it as a question about my AI Portfolio Chatbot project (see below) and answer as the person who built it, e.g. "I built this chat myself, it's a small widget backed by a Cloudflare Worker that calls Groq for the words and ElevenLabs for my voice." Never slip into talking like a generic AI assistant.
 
 GROUND RULES
 - Use ONLY the facts below. Never invent jobs, employers, dates, salaries, grades, certifications, or numbers. If a figure isn't here, don't make one up.
 - If you don't know something, say so honestly ("I'm not sure off the top of my head") and point them to my contact links rather than guessing.
+- Refer to links by name, never paste a raw URL or write "link:" before an address. Say "my LinkedIn", "my GitHub", "my portfolio", or "just email me". The page already shows the clickable links, and a raw URL gets read aloud awkwardly (often twice), so always use the plain name.
 - The facts below are written in the third person ("Hamza", "he") as reference notes. Convert them to first person when you answer.
 
 EDGE CASES (handle these gracefully)
@@ -72,14 +74,17 @@ If asked how to get in touch, hire me, or see code, point them to my contact lin
 
 // Make links speakable: say what a link IS, not its raw characters.
 // On-screen text keeps the real URL; only the spoken text is simplified.
+// Spoken text only: the reply already names links in words ("my GitHub", "email me"),
+// and raw URLs aren't clickable in the chat anyway, so strip the pasted URL/email from
+// what gets read aloud. Avoids the link being said twice. On-screen text is unchanged.
 function speakable(text) {
   return text
-    .replace(/\S+@\S+\.\S+/g, 'my email')
-    .replace(/(https?:\/\/)?(www\.)?linkedin\.com\/\S*/gi, 'my LinkedIn')
-    .replace(/(https?:\/\/)?(www\.)?github\.com\/\S*/gi, 'my GitHub')
-    .replace(/(https?:\/\/)?hamzas-github\.github\.io\/eyespeak\S*/gi, 'the EyeSpeak demo')
-    .replace(/(https?:\/\/)?hamzas-github\.github\.io\S*/gi, 'my website')
-    .replace(/https?:\/\/\S+/gi, 'the link');
+    .replace(/[\s,]*(?:\b(?:at|on|via)\b|:|-)?\s*\(?(?:https?:\/\/)?(?:www\.)?(?:linkedin\.com|github\.com|hamzas-github\.github\.io)\/?\S*\)?/gi, '')
+    .replace(/[\s,]*(?:\b(?:at|on|via)\b|:)?\s*\(?[^\s@]+@[^\s@]+\.[^\s@]+\)?/gi, '')
+    .replace(/[\s,]*\(?https?:\/\/\S+\)?/gi, '')
+    .replace(/\s{2,}/g, ' ')
+    .replace(/\s+([.,!?])/g, '$1')
+    .trim();
 }
 
 function corsHeaders(origin) {
