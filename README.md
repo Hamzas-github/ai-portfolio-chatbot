@@ -28,7 +28,24 @@ I picked this stack so the whole thing costs me close to nothing to run.
 ## Repo layout
 
 ```
-worker/    the Cloudflare Worker (keys, bio, chat + voice proxy)
+worker/    the Cloudflare Worker (keys, chat + voice proxy)
 widget/    the floating chat widget, one self-contained file
 demo/      a standalone page to see it working
+aws/       AWS-native backend: terraform / lambda / docs corpus / eval
 ```
+
+## AWS-native version (Bedrock + RAG + Terraform)
+
+There's a second backend under [`aws/`](aws/README.md) that swaps the chat brain from
+Groq to **Amazon Bedrock with a RAG Knowledge Base** — Titan v2 embeddings, **S3 Vectors**
+as the near-free vector store, Claude 3 Haiku for generation, a Lambda behind a Function
+URL, all in Terraform. The Worker stays as the front door and still does ElevenLabs voice;
+it just calls AWS instead of Groq for the words, so the widget is unchanged. My real facts
+now live as a retrieval corpus in `aws/docs/` instead of a hardcoded prompt.
+
+```
+browser widget  ->  Cloudflare Worker  ->  AWS Lambda  ->  Bedrock KB -> S3 Vectors
+                                       ->  ElevenLabs (voice)
+```
+
+See [`aws/README.md`](aws/README.md) for deploy, ingestion, eval, cost and teardown.

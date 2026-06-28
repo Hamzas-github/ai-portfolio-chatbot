@@ -1,3 +1,11 @@
 name = "hamza-chat-worker"
 main = "worker.js"
 compatibility_date = "2024-09-23"
+
+# RAG_URL is the AWS Lambda Function URL (terraform output `function_url`). Not secret.
+[vars]
+RAG_URL = "https://REPLACE-ME.lambda-url.us-east-1.on.aws/"
+
+# Secrets (do NOT put these here — set via `wrangler secret put`):
+#   wrangler secret put ELEVENLABS_API_KEY
+#   wrangler secret put ASK_HAMZA_KEY   # only if you set shared_secret in Terraform

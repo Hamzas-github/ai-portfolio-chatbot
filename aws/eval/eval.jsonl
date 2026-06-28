@@ -1,0 +1,8 @@
+{"question": "What is EyeSpeak?", "expect": "eye", "mode": "contains"}
+{"question": "Tell me about your fraud detection work.", "expect": "fraud", "mode": "contains"}
+{"question": "What did you build for ecommerce?", "expect": "ecommerce", "mode": "contains"}
+{"question": "Do you need visa sponsorship?", "expect": "sponsorship", "mode": "contains"}
+{"question": "What's the London rental analysis about?", "expect": "rent", "mode": "contains"}
+{"question": "What roles are you looking for?", "expect": "Analyst", "mode": "contains"}
+{"question": "How can someone contact you?", "expect": "LinkedIn", "mode": "contains"}
+{"question": "What was your exact salary at MUVA in 2019?", "expect": "not sure off the top of my head", "mode": "refuse"}

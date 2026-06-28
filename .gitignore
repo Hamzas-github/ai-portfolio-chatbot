@@ -2,3 +2,11 @@ node_modules/
 .wrangler/
 .dev.vars
 *.log
+
+# terraform
+aws/terraform/.terraform/
+aws/terraform/build/
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+crash.log
