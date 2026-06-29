@@ -4,7 +4,15 @@ locals {
   account_id          = data.aws_caller_identity.current.account_id
   function_name       = "${var.project_name}-rag"
   embedding_model_arn = "arn:aws:bedrock:${var.region}::foundation-model/${var.embedding_model_id}"
-  generation_model_arn = "arn:aws:bedrock:${var.region}::foundation-model/${var.generation_model_id}"
+
+  # Claude Haiku 4.5 is inference-profile-only (no direct on-demand), so generation
+  # goes through the US cross-region inference profile. RetrieveAndGenerate takes the
+  # profile ARN as modelArn. Claude 3 Haiku was retired to "Legacy" and is blocked.
+  inference_profile_id = "us.${var.generation_model_id}"
+  generation_model_arn = "arn:aws:bedrock:${var.region}:${local.account_id}:inference-profile/${local.inference_profile_id}"
+  # A "us." profile can route to any US region, so InvokeModel must allow the
+  # underlying foundation model in every region the profile may use.
+  generation_fm_arn = "arn:aws:bedrock:*::foundation-model/${var.generation_model_id}"
 
   # Wired in from guardrail.tf when var.enable_guardrail = true.
   guardrail_id      = var.enable_guardrail ? aws_bedrock_guardrail.this[0].guardrail_id : ""
@@ -177,10 +185,11 @@ resource "aws_iam_role_policy" "lambda" {
         Resource = aws_bedrockagent_knowledge_base.this.arn
       },
       {
-        Sid      = "InvokeGenerationModel"
-        Effect   = "Allow"
-        Action   = "bedrock:InvokeModel"
-        Resource = local.generation_model_arn
+        Sid    = "InvokeGenerationModel"
+        Effect = "Allow"
+        # GetInferenceProfile is required when modelArn is an inference profile.
+        Action   = ["bedrock:InvokeModel", "bedrock:GetInferenceProfile"]
+        Resource = [local.generation_model_arn, local.generation_fm_arn]
       },
       ], var.enable_guardrail ? [{
         Sid      = "ApplyGuardrail"
@@ -203,7 +212,7 @@ resource "aws_lambda_function" "this" {
   handler          = "handler.handler"
   filename         = data.archive_file.lambda.output_path
   source_code_hash = data.archive_file.lambda.output_base64sha256
-  timeout          = 30
+  timeout          = 60
   memory_size      = 256
 
   environment {

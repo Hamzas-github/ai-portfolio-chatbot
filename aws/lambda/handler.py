@@ -18,7 +18,12 @@ def _client():
     global _agent
     if _agent is None:
         import boto3
-        _agent = boto3.client("bedrock-agent-runtime", region_name=REGION)
+        from botocore.config import Config
+        # Bounded retries + read timeout so a transient throttle is retried but a
+        # hard one can't silently eat the whole Lambda timeout.
+        cfg = Config(retries={"max_attempts": 3, "mode": "standard"},
+                     connect_timeout=10, read_timeout=50)
+        _agent = boto3.client("bedrock-agent-runtime", region_name=REGION, config=cfg)
     return _agent
 
 # Orchestration prompt. $search_results$ and $output_format_instructions$ are

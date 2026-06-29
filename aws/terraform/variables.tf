@@ -17,9 +17,9 @@ variable "embedding_model_id" {
 }
 
 variable "generation_model_id" {
-  description = "Bedrock generation model. Claude 3 Haiku is the cheapest Claude and supports on-demand in us-east-1 (no inference profile needed)."
+  description = "Bedrock generation model. Claude Haiku 4.5 is the cheapest ACTIVE Claude Haiku (Claude 3 Haiku is now Legacy/blocked). It's inference-profile-only; main.tf builds the us.* profile ARN from this id."
   type        = string
-  default     = "anthropic.claude-3-haiku-20240307-v1:0"
+  default     = "anthropic.claude-haiku-4-5-20251001-v1:0"
 }
 
 variable "vector_dimension" {

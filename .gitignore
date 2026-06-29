@@ -9,4 +9,5 @@ aws/terraform/build/
 *.tfstate
 *.tfstate.*
 .terraform.lock.hcl
+aws/terraform/tfplan
 crash.log
